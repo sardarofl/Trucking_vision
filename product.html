@@ -1,0 +1,155 @@
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+<!-- Include Unite Gallery core files -->
+				<script src='unitegallery/js/unitegallery.min.js' type='text/javascript'  ></script>
+				<link  href='unitegallery/css/unite-gallery.css' rel='stylesheet' type='text/css' />
+
+				<!-- include Unite Gallery Theme Files -->
+
+				<script src='unitegallery/themes/tiles/ug-theme-tiles.js' type='text/javascript'></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<div class="img-container" style="position:fixed; margin-top:-30px; height:100%; width:100%; z-index:-2; background-image:url('images/page-home-1.jpg');"></div>
+<style>
+.img-container { background-color: #000000; }
+            .img-container img { opacity: 0.5; }
+</style>
+<a href=""  id="link"style="position:fixed; z-index:3; width:50px; margin:20px;  height:50px;"><img border="0" alt="W3Schools" src="./images/left-arrow (1).png" width="100" height="100"></a>
+<div class="product_details row">
+<div class="col-md-12">
+<!--<div id="gallery" data-skin="darkness" data-width="1920" data-height="800"  style=""></div>-->
+
+
+<div id="gallery" style="display:none; margin-top:100px; width:100%;">
+
+
+
+
+ </div>
+  <!--<a href="images/Vision Truck Group Marketing - DJpINt8WsAAbJS5.jpg"><img src="images/Vision Truck Group Marketing - DJpINt8WsAAbJS5.jpg"></a>
+  <a href="http://www.youtube.com/embed/YE7VzlLtp-4"><img src="http://img.youtube.com/vi/YE7VzlLtp-4/2.jpg"></a>-->
+
+</div>
+<!--<div class="col-md-6 product_description_name" style="font-size:3em;">-->
+
+</div>
+</div>
+
+<script>
+
+
+var ip='localhost';
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
+
+
+var product_id = getUrlParameter('id');
+console.log(product_id);
+
+
+
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        var myObj = JSON.parse(this.responseText);
+
+        //$(".child_product_details").remove();
+        for(var i=0;i<myObj.length;i++)
+        {
+
+          if(myObj[i].id==product_id)
+          {
+
+            $("#link").attr("href", "index.html?id="+myObj[i].categorie+"&back=1")
+          //    console.log("selected product is:"+myObj[i].product_name);
+          //  $(".product_description_name").append('<h4 class="row">'+myObj[i].product_name+'</h4><p class="row">'+myObj[i].description+'</p></div>');
+            }
+
+        }
+
+    }
+};
+xmlhttp.open("GET", "http://"+ip+":3000/Products", true);
+xmlhttp.send();
+
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        var myObj = JSON.parse(this.responseText);
+
+        //$(".child_product_details").remove();
+        for(var i=0;i<myObj.length;i++)
+        {
+
+          if(myObj[i].id==product_id)
+          {
+            if(myObj[i].type=="img")
+            {
+              $("#gallery").append('  <img alt="'+myObj[i].title+'" src="'+myObj[i].href+'" data-image="'+myObj[i].src+'" data-description="'+myObj[i].description+'">');
+
+
+            }else if(myObj[i].type=="youtube")
+            {
+                $("#gallery").append('<div data-type="youtube"data-title="'+myObj[i].title+'" data-description="'+myObj[i].description+'"data-thumb="'+myObj[i].href+'" data-image="'+myObj[i].href+'"data-videoid="'+myObj[i].src+'" ></div>  }');
+
+          //  $("#gallery").append('<a href="'+myObj[i].href+'"><img src="'+myObj[i].src+'"></a>');
+
+          }
+          console.log("got images "+myObj[i].href)
+        }  //  $("#gallery").html5gallery();
+
+
+    }
+    api = $("#gallery").unitegallery({
+      gallery_theme: "tiles",				//choose gallery theme (if more then one themes includes)
+              gallery_width:"100%",				//gallery width
+              gallery_min_width: 150,				//gallery minimal width when resizing
+              gallery_background_color: "",		//set custom background color. If not set it will be taken from css.
+
+      tiles_col_width: 500,					//column width - exact or base according the settings
+        tiles_align:"center",					//align of the tiles in the space
+        tiles_space_between_cols: 3,			//space between images
+        tiles_exact_width: false,				//exact width of column - disables the min and max columns
+        tiles_space_between_cols: 3,			//space between images
+        tiles_space_between_cols_mobile: 3,     //space between cols for mobile type
+        tiles_include_padding: true,			//include padding at the sides of the columns, equal to current space between cols
+        tiles_min_columns: 2,					//min columns
+        tiles_max_columns: 0,					//max columns (0 for unlimited)
+
+
+                  lightbox_textpanel_title_color:null,				//textpanel title color. if null - take from css
+                  lightbox_textpanel_title_font_family:null,			//textpanel title font family. if null - take from css
+                  lightbox_textpanel_title_text_align:null,			//textpanel title text align. if null - take from css
+                  lightbox_textpanel_title_font_size:50,			//textpanel title font size. if null - take from css
+                  lightbox_textpanel_title_bold:null,					//textpanel title bold. if null - take from css
+                  lightbox_textpanel_css_title:{},					//textpanel additional css of the title
+
+
+                        lightbox_textpanel_desc_color:null,					//textpanel description font family. if null - take from css
+                        lightbox_textpanel_desc_font_family:null,			//textpanel description font family. if null - take from css
+                        lightbox_textpanel_desc_text_align:null,			//textpanel description text align. if null - take from css
+                        lightbox_textpanel_desc_font_size:50,				//textpanel description font size. if null - take from css
+                        lightbox_textpanel_desc_bold:null,					//textpanel description bold. if null - take from css
+                        lightbox_textpanel_css_description:{},				//textpanel additional css of the description
+      });
+    }
+};
+xmlhttp.open("GET", "http://"+ip+":3000/Product_medias", true);
+xmlhttp.send();
+
+</script>

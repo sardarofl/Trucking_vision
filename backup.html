@@ -1,0 +1,244 @@
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<div class="container-fluid media-slides">
+  <video id="myVideo" loop autoplay>
+     <source  src="assets/video/video.mp4" type="video/mp4">
+     Your browser does not support the video tag.
+   </video>
+</div>
+
+<div class="parent_layout">
+<div style="margin-top:30px;" class="container category_browser">
+  <div id="categories" class="row">
+    <!--
+    <div class="col-xs-6 col-sm-4">
+      <div class="card" style="width: 20rem;">
+      <img class="card-img-top" src="assets/img/truck_engine.jpg" alt="Card image cap">
+        <div style="margin:30px;"class="card-block">
+          <h4 class="card-title">Category 1</h4>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="btn btn-primary cat_button">Browse</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-6 col-sm-4">
+      <div class="card" style="width: 20rem;">
+      <img class="card-img-top" src="assets/img/truck_engine.jpg" alt="Card image cap">
+        <div style="margin:30px;" class="card-block">
+          <h4 class="card-title">Category 2</h4>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="btn btn-primary cat_button">Browse</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-6 col-sm-4">
+      <div class="card" style="width: 20rem;">
+      <img class="card-img-top" src="assets/img/truck_engine.jpg" alt="Card image cap">
+        <div style="margin:30px;" class="card-block">
+          <h4 class="card-title">Category 3</h4>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="btn btn-primary cat_button">Browse</a>
+        </div>
+      </div>
+    </div>-->
+  </div>
+</div>
+
+
+<div style="margin-top:30px;" class="container product_browser">
+  <div id="products" class="row">
+
+  </div>
+</div>
+
+<div style="margin-top:30px;" class="container product_details">
+  <div id="product_detail" >
+<div class="child_products row"><div class="col-md-6">
+  <div class="html5gallery" data-skin="darkness" data-width="480" data-height="272" style="display:none;">
+    <a href="images/Vision Truck Group Marketing - DJpINt7XgAIqQdi.jpg"><img src="images/Vision Truck Group Marketing - DJpINt7XgAIqQdi.jpg"></a>
+    <a href="images/Vision Truck Group Marketing - DJpINt8WsAAbJS5.jpg"><img src="images/Vision Truck Group Marketing - DJpINt8WsAAbJS5.jpg"></a>
+    <a href="http://www.youtube.com/embed/YE7VzlLtp-4"><img src="http://img.youtube.com/vi/YE7VzlLtp-4/2.jpg"></a>
+  </div>
+</div>
+<div class="col-md-6"><h4 class="row">'+myObj[i].product_name+'</h4><p class="row">'+myObj[i].description+'</p></div>
+</div>
+  </div>
+</div>
+
+</div>
+
+<!-- JavaScripts-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<!-- Plugins-->
+
+<script type="text/javascript">
+
+var ip='localhost';
+var selected_category='Null';
+var selected_product='Null';
+
+$(document).ready(function () {
+
+
+
+});
+
+
+$(document).ready(function () {
+
+  //  var products[];
+  //  txt1 = '<div class="col-xs-6 col-sm-4"><div class="card" style="width: 20rem;"><img class="card-img-top" src="assets/img/truck_engine.jpg" alt="Card image cap"><div style="margin:30px;"class="card-block">        <h4 class="card-title">Product 1</h4><p class="card-text">Some quick example text to build on the card title and make up the bulk of the cards content.</p><a href="#" class="btn btn-primary">Browse</a></div></div></div>';
+//    $("#products").append(txt1);
+
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var myObj = JSON.parse(this.responseText);
+            for(var i=0;i<myObj.length;i++)
+            {
+                $("#categories").append('<div class="col-xs-6 col-sm-4"><div class="card" style="width: 20rem;"><img class="card-img-top" src="assets/img/truck_engine.jpg" alt="Card image cap"><div style="margin:30px;"class="card-block">        <h4 class="card-title">'+myObj[i].category_name+'</h4><p class="card-text">browse '+myObj[i].category_name+'</p><a href="#" data-id="'+myObj[i].category_name+'" class="btn btn-primary cat_button">Browse</a></div></div></div>');
+
+                //console.log(selected_category);
+            }
+        }
+    };
+    xmlhttp.open("GET", "http://"+ip+":3000/Categories", true);
+    xmlhttp.send();
+});
+
+
+
+/////////////////////////////////////////////////////////////////////////
+$(document).ready(function () {
+
+  $(".media-slides").show();
+  $(".category_browser").hide();
+  $(".product_browser").hide();
+
+});
+
+
+
+$(".media-slides").click(function () {
+    $(".media-slides").hide();
+    $(".parent_layout").show('bounceInUp animated');
+    $(".category_browser").show('bounceInUp animated');
+});
+
+
+//////////////////////////clicking category button////////////////////////////////////////////
+$(document).on("click", ".cat_button", function(){
+
+console.log($(this).data("id"));
+selected_category=$(this).data("id");
+  $(".category_browser").hide('bounceInUp animated');
+  $(".product_browser").show('bounceInUp animated');
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+          var myObj = JSON.parse(this.responseText);
+        //  selected_category=myObj[i].category_name;
+          //console.log(selected_category);
+  $(".child_products").remove();
+          for(var i=0;i<myObj.length;i++)
+          {
+
+            if(myObj[i].categorie==selected_category)
+            {
+              console.log("selected category is:"+myObj[i].categorie);
+              console.log("selected user category is:"+selected_category);
+
+              $("#products").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card" style="width: 20rem;"><img class="card-img-top" src="assets/img/truck_engine.jpg" alt="Card image cap"><div style="margin:30px;"class="card-block">        <h4 class="card-title">'+myObj[i].product_name+'</h4><p class="card-text">'+myObj[i].description+'</p><a href="#" data-id="'+myObj[i].id+'" class="btn btn-primary prod_button">See More</a></div></div></div>');
+
+            }
+
+          }
+
+      }
+  };
+  xmlhttp.open("GET", "http://"+ip+":3000/Products", true);
+  xmlhttp.send();
+});
+///////////////////////////////////////////////////////clicking for product details/////////////////////
+$(document).on("click", ".prod_button", function(){
+
+console.log($(this).data("id"));
+selected_product=$(this).data("id");
+  $(".product_browser").hide('bounceInUp animated');
+  $(".product_detail").show('bounceInUp animated');
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+          var myObj = JSON.parse(this.responseText);
+
+          $(".child_products").remove();
+          for(var i=0;i<myObj.length;i++)
+          {
+
+            if(myObj[i].id==selected_product)
+            {
+              console.log("selected product is:"+myObj[i].product_name);
+
+              $("#product_detail").append('');
+
+            }
+
+          }
+
+      }
+  };
+  xmlhttp.open("GET", "http://"+ip+":3000/Products", true);
+  xmlhttp.send();
+});
+///////////////////////////////////////////////////////parent layout/////////////////////
+$(".parent_layout").click(function () {
+clearTimeout(myVar);
+myVar = setTimeout(function() {
+  $(".media-slides").show();
+  $(".parent_layout").hide('bounceInUp animated');
+  $(".product_browser").hide('bounceInUp animated');
+    $(".child_products").remove();
+  }, 5000);
+});
+
+
+var myVar;
+
+  $(".media-slides").click(function () {
+    myVar = setTimeout(function() {
+      $(".media-slides").show();
+      $(".parent_layout").hide('bounceInUp animated');
+      $(".product_browser").hide('bounceInUp animated');
+        $(".child_products").remove();
+      }, 5000);
+  });
+
+</script>
+<script type="text/javascript" src="html5gallery/jquery.js"></script>
+<script type="text/javascript" src="html5gallery/html5gallery.js"></script>
+
+<style>
+#myVideo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other
+}
+</style>

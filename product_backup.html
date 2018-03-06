@@ -1,0 +1,91 @@
+
+<script type="text/javascript" src="html5gallery/jquery.js"></script>
+<script type="text/javascript" src="html5gallery/html5gallery.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<a href="" id="link"style="position:fixed; z-index:3; width:50px; height:50px;">Back</a>
+<div class="product_details row">
+<div class="col-md-6">
+<div id="gallery" data-skin="darkness" data-width="1920" data-height="800"  style="">
+  <!--<a href="images/Vision Truck Group Marketing - DJpINt8WsAAbJS5.jpg"><img src="images/Vision Truck Group Marketing - DJpINt8WsAAbJS5.jpg"></a>
+  <a href="http://www.youtube.com/embed/YE7VzlLtp-4"><img src="http://img.youtube.com/vi/YE7VzlLtp-4/2.jpg"></a>-->
+</div>
+</div>
+<!--<div class="col-md-6 product_description_name" style="font-size:3em;">-->
+
+</div>
+</div>
+
+<script>
+
+
+var ip='localhost';
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
+
+
+var product_id = getUrlParameter('id');
+console.log(product_id);
+
+
+
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        var myObj = JSON.parse(this.responseText);
+
+        //$(".child_product_details").remove();
+        for(var i=0;i<myObj.length;i++)
+        {
+
+          if(myObj[i].id==product_id)
+          {
+            $("#link").attr("href", "index.html?id="+myObj[i].categorie+"&back=1")
+          //    console.log("selected product is:"+myObj[i].product_name);
+          //  $(".product_description_name").append('<h4 class="row">'+myObj[i].product_name+'</h4><p class="row">'+myObj[i].description+'</p></div>');
+            }
+
+        }
+
+    }
+};
+xmlhttp.open("GET", "http://"+ip+":3000/Products", true);
+xmlhttp.send();
+
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        var myObj = JSON.parse(this.responseText);
+
+        //$(".child_product_details").remove();
+        for(var i=0;i<myObj.length;i++)
+        {
+
+          if(myObj[i].id==product_id)
+          {
+            console.log("got images "+myObj[i].href)
+            $("#gallery").append('<a href="'+myObj[i].href+'"><img src="'+myObj[i].src+'"></a>');
+
+          }
+
+        }    $("#gallery").html5gallery();
+
+    }
+};
+xmlhttp.open("GET", "http://"+ip+":3000/Product_medias", true);
+xmlhttp.send();
+
+</script>
