@@ -1,5 +1,5 @@
-var express   = require('express');
-
+var app   = require('express')();
+var http = require('http').Server(app);
 var mysql = require('mysql');
 var multer  =   require('multer');
 var path = require('path');
@@ -10,12 +10,8 @@ var connection = mysql.createConnection({
 	password:'',
 	database:'trucking'
 	});
-var app = express();
 
-//static lockfileVersion
-//app.use(express.static('/Pages'));
-//console.log(__dirname + './Pages');
- app.use(express.static(__dirname));
+
 
 	var storage =   multer.diskStorage({
 	  destination: function (req, file, callback) {
@@ -25,20 +21,13 @@ var app = express();
 	    callback(null, file.fieldname + '-' + Date.now()+path.extname(file.originalname));
 	  }
 	});
-
-	var upload = multer({ storage : storage}).single('image');
+	var upload = multer({ storage : storage}).single('userPhoto');
 	app.post('/api/photo',function(req,res){
-
 	    upload(req,res,function(err) {
-					console.log('No?');
 	        if(err) {
-								console.log(err);
 	            return res.end("Error uploading file.");
-
 	        }
-						console.log('File uploaded');
 	        res.end("File is uploaded");
-
 	    });
 	});
 
@@ -98,7 +87,7 @@ app.get('/fetch_categories',function(req,res){
 app.post('/login',function(req,res){
 	var item = req.body.data[0].item;
 	var pass = req.body.data[1].item;
-	//console.log(req);
+	console.log(req);
 	var data = {
 		"Data":""
 	};
@@ -141,6 +130,6 @@ app.get('/log',function(req, res,err){
 
 });*/
 
-app.listen(3000,function(){
+http.listen(3000,function(){
 	console.log(`Connected & Listen to 3000`);
 });
