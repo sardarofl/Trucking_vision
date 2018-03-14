@@ -71,13 +71,13 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Edit Product</h1>
+                        <h1 id="category_identifier" class="page-header">Edit Product</h1>
                     </div>
 						<!-- /.col-lg-12 -->
 
             <form method="POST"   enctype="multipart/form-data">
-            <input id="field_category" name="category" class="form-control" placeholder="Enter a new Category Name">
-           <input type="hidden" name="size" value="1000000">
+            <input id="field_product" name="product" class="form-control" placeholder="Enter a new Product Name">
+           <input id="category_name" type="hidden" name="category" value="">
            <div>
              <input id="image_name" type="file" name="image">
            </div>
@@ -86,9 +86,9 @@
            </div>
            </form>
 
-           <table id="trucking_categories" style="width:100%">
+           <table id="trucking_products" style="width:100%">
              <tr>
-             <th>Category Name</th>
+             <th>Product Name</th>
              <th>Image</th>
              <th>Delete</th>
              <th>Edit Products</th>
@@ -130,6 +130,25 @@
 <script>
 $(document).ready(function(){
 
+  ///get url parameter
+  var getUrlParameter = function getUrlParameter(sParam) {
+      var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+          sURLVariables = sPageURL.split('&'),
+          sParameterName,
+          i;
+
+      for (i = 0; i < sURLVariables.length; i++) {
+          sParameterName = sURLVariables[i].split('=');
+
+          if (sParameterName[0] === sParam) {
+              return sParameterName[1] === undefined ? true : sParameterName[1];
+          }
+      }
+  };
+
+  var category_selected = getUrlParameter('category');
+  document.getElementById("category_name").value = category_selected;
+  document.getElementById("category_identifier").innerHTML = "Edit Products for '"+category_selected+"' category";
 /////////////////set data to above fields////////////////////////////////////////////
 var xmlhttp = new XMLHttpRequest();
 xmlhttp.onreadystatechange = function() {
@@ -137,7 +156,7 @@ xmlhttp.onreadystatechange = function() {
     var myObj = JSON.parse(this.responseText);
     for(var i=0;i<myObj.length;i++)
     {
-      var table = document.getElementById("trucking_categories");
+      var table = document.getElementById("trucking_products");
       var row = table.insertRow();
 
       var cell1 = row.insertCell(0);
@@ -146,16 +165,16 @@ xmlhttp.onreadystatechange = function() {
       var cell4 = row.insertCell(3);
 
       // Add some text to the new cells:
-      cell1.innerHTML = myObj[i].category_name;
+      cell1.innerHTML = myObj[i].product_name;
       cell2.innerHTML = myObj[i].image;
-      cell3.innerHTML ="<a href='#' id='delete_category' data-id="+myObj[i].id+" data-category="+myObj[i].category_name+">Delete</a>";
-      cell4.innerHTML ="<a id='edit_category' href='/edit'>Edit Products</a>";
+      cell3.innerHTML ="<a href='#' id='delete_product' data-id="+myObj[i].id+" data-product="+myObj[i].product_name+">Delete</a>";
+      cell4.innerHTML ="<a id='edit_gallery' href=''>Edit Gallery</a>";
       //cell5.innerHTML ="<form method='post'><input name='del_value' value="+myObj[i].id+" class='form-control'><input class='deletetable' type='submit' value='Delete' class='btn btn-primary'></input></form>";
     }
 
   }
 };
-xmlhttp.open("GET", "http://localhost:3000/fetch_categories", true);
+xmlhttp.open("GET", "http://localhost:3000/fetch_products/"+category_selected, true);
 xmlhttp.send();
 
 //////////////////end setting data///////////////////////////
@@ -171,20 +190,21 @@ xmlhttp.send();
     $('form').on('submit', function(){
       console.log("I clicked");
 
-        var cat_field = $('#field_category');
+        var prod_field = $('#field_product');
         var img_field = $('#image_name');
+        var cat_field = $('#category_name');
         var actual_file = $('#image_name').get(0).files;
         var filename = img_field.val().replace(/^.*\\/, "");
         console.log(actual_file);
-        var new_category = {data:[{item: cat_field.val()},{item: filename}]};
-        console.log(new_category);
+        var new_product = {data:[{item: prod_field.val()},{item: filename},{item: cat_field.val()}]};
+        console.log(new_product);
 
 
         $(this).ajaxSubmit({
-        url: '/api/photo',
-        data: new_category,
+        url: '/add_product',
+        data: new_product,
         success: function(data){
-              alert("Category "+cat_field.val()+" Added.");
+              alert("Product "+prod_field.val()+" Added.");
               location.reload();
         }
       });
@@ -194,14 +214,14 @@ xmlhttp.send();
 
 });
 
- $(document).on("click", "a", function(){
+ $(document).on("click", "#delete_product", function(){
    var url="http://localhost:3000/"
   var id = $(this).attr("data-id");
-    var category = $(this).attr("data-category");
+    var category = $(this).attr("data-product");
   console.log('you selected on '+id);
   $.ajax({
     type: 'DELETE',
-    url: url+'delete_category/' + id,
+    url: url+'delete_product/' + id,
     success: function(data){
       //do something with the data via front-end framework
       location.reload();
