@@ -71,7 +71,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Edit Categories</h1>
+                        <h1 class="page-header">Edit Product</h1>
                     </div>
 						<!-- /.col-lg-12 -->
 
@@ -149,8 +149,9 @@ xmlhttp.onreadystatechange = function() {
       cell1.innerHTML = myObj[i].category_name;
       cell2.innerHTML = myObj[i].image;
       cell3.innerHTML ="<a href='#' id='delete_category' data-id="+myObj[i].id+" data-category="+myObj[i].category_name+">Delete</a>";
-      cell4.innerHTML ="<a id='edit_category' href='http://localhost:3000/edit?id="+myObj[i].id+"&category="+myObj[i].category_name+"'>Edit Products</a>";
-      }
+      cell4.innerHTML ="<a id='edit_category' href='/edit'>Edit Products</a>";
+      //cell5.innerHTML ="<form method='post'><input name='del_value' value="+myObj[i].id+" class='form-control'><input class='deletetable' type='submit' value='Delete' class='btn btn-primary'></input></form>";
+    }
 
   }
 };
@@ -180,7 +181,7 @@ xmlhttp.send();
 
 
         $(this).ajaxSubmit({
-        url: '/add_product',
+        url: '/api/photo',
         data: new_category,
         success: function(data){
               alert("Category "+cat_field.val()+" Added.");
@@ -193,7 +194,7 @@ xmlhttp.send();
 
 });
 
- $(document).on("click", "#delete_category", function(){
+ $(document).on("click", "a", function(){
    var url="http://localhost:3000/"
   var id = $(this).attr("data-id");
     var category = $(this).attr("data-category");

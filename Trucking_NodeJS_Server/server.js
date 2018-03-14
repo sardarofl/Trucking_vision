@@ -1,5 +1,6 @@
 var express   = require('express');
 
+
 var mysql = require('mysql');
 var multer  =   require('multer');
 var path = require('path');
@@ -11,26 +12,48 @@ var connection = mysql.createConnection({
 	database:'trucking'
 	});
 var app = express();
-
 //static lockfileVersion
 //app.use(express.static('/Pages'));
 //console.log(__dirname + './Pages');
  app.use(express.static(__dirname));
 
+
+ app.use(bodyParser.urlencoded({ extended: true }));
+ app.use(bodyParser.json());
+
+	var filename_path;
 	var storage =   multer.diskStorage({
 	  destination: function (req, file, callback) {
 	    callback(null, './uploads');
 	  },
 	  filename: function (req, file, callback) {
+			filename_path=file.fieldname + '-' + Date.now()+path.extname(file.originalname);
 	    callback(null, file.fieldname + '-' + Date.now()+path.extname(file.originalname));
 	  }
 	});
 
 	var upload = multer({ storage : storage}).single('image');
-	app.post('/api/photo',function(req,res){
+	app.post('/add_product',function(req,res){
+
+	var body = req.body.body;
+
+	//var image = req.file.filename;
 
 	    upload(req,res,function(err) {
-					console.log('No?');
+				var item = req.body.data[0].item;
+				var pass = req.body.data[1].item;
+				console.log(item);
+				console.log(pass);
+				console.log(filename_path);
+				var data = {
+					"Data":""
+				};
+
+					connection.query("INSERT INTO categories (`category_name`, `image`,`image_path`) VALUES ('"+item+"','"+pass+"','"+filename_path+"')", function (err, result) {
+						if (err) throw err;
+						//	 res.json(data);
+					});
+
 	        if(err) {
 								console.log(err);
 	            return res.end("Error uploading file.");
@@ -43,8 +66,6 @@ var app = express();
 	});
 
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -64,16 +85,25 @@ app.get('/',function(req,res){
 });*/
 
 app.get('/',function(req,res){
-      res.sendFile(__dirname + "/Pages/Categories.html");
+  res.sendFile(path.join(__dirname+'/Pages/Categories.html'));
+  //__dirname : It will resolve to your project folder.
 });
+
+
+app.get('/edit',function(req,res){
+
+  res.sendFile(path.join(__dirname+'/Pages/edit_product.html'));
+
+});
+
 
 app.get('/fetch_categories',function(req,res){
 	connection.query("SELECT * from categories",function(err, rows, fields){
 		if(rows.length != 0){
 			res.json(rows);
 		}else{
-			data["Data"] = 'No data Found..';
-				res.json(data);
+		//	data["Data"] = 'No data Found..';
+		//		res.json(data);
 		}
 	});
 });
