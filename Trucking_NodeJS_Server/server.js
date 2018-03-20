@@ -78,8 +78,11 @@ var app = express();
 					console.log(item);
 					console.log(pass);
 					console.log(cat);
+					//"INSERT INTO products (`product_name`,`categorie`, `image`,`image_path`) VALUES ('"+item+"','"+cat+"','"+pass+"','"+filename_path+"')"
 					//'INSERT INTO products product_name = ?, categorie = ?, image = ?, image_path = ?', [item, cat, pass, userId]
-					connection.query('INSERT INTO products product_name = ?, categorie = ?, image = ?, image_path = ?', [item, cat, pass, userId], function (err, result) {
+				  //connection.query("INSERT INTO `products` `product_name` = ?, `categorie` = ?, `image` = ?, `image_path` = ?", [item, cat, pass, filename_path], function (err, result) {
+					//INSERT INTO products (product_name, categorie, image, image_path) VALUES (?,?,?,?)
+					connection.query("INSERT INTO products (product_name, categorie, image, image_path) VALUES (?,?,?,?)", [item, cat, pass, filename_path], function (err, result) {
 						if (err) throw err;
 						//	 res.json(data);
 					});

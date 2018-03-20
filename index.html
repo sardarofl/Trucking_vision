@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -9,9 +10,13 @@
    </video>
 </div>
 
+
+<body>
 <div class="parent_layout">
 
 <div style="margin-top:30px;" class="container category_browser">
+  <div class="bottom_indicator" style="position:fixed; z-index:3;  position: fixed; bottom: 1.6em; left:90%; width: 100%;"><img class="back_button" border="0" alt="W3Schools" src="./images/bottom-arrow.png" width="100" height="100"></div>
+
   <img style="   display: block;
     margin-left: auto;
     margin-right: auto;
@@ -19,43 +24,13 @@
 
   <div id="categories" class="row">
 
-    <!--
-    <div class="col-xs-6 col-sm-4">
-      <div class="card" style="width: 20rem;">
-      <img class="card-img-top" src="assets/img/truck_engine.jpg" alt="Card image cap">
-        <div style="margin:30px;"class="card-block">
-          <h4 class="card-title">Category 1</h4>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="btn btn-primary cat_button">Browse</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-xs-6 col-sm-4">
-      <div class="card" style="width: 20rem;">
-      <img class="card-img-top" src="assets/img/truck_engine.jpg" alt="Card image cap">
-        <div style="margin:30px;" class="card-block">
-          <h4 class="card-title">Category 2</h4>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="btn btn-primary cat_button">Browse</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-xs-6 col-sm-4">
-      <div class="card" style="width: 20rem;">
-      <img class="card-img-top" src="assets/img/truck_engine.jpg" alt="Card image cap">
-        <div style="margin:30px;" class="card-block">
-          <h4 class="card-title">Category 3</h4>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="btn btn-primary cat_button">Browse</a>
-        </div>
-      </div>
-    </div>-->
   </div>
 </div>
 
 <a class="product_browser " href="#"  id="link"style="position:fixed; z-index:3; width:50px; margin:20px; height:50px;"><img class="back_button" border="0" alt="W3Schools" src="./images/left-arrow (1).png" width="100" height="100"></a>
 
 <div style="margin-top:30px;" class="container product_browser">
+  <div class="bottom_indicator" style="position:fixed; z-index:3;  position: fixed; bottom: 1.6em; left:90%; width: 100%;"><img class="back_button" border="0" alt="W3Schools" src="./images/bottom-arrow.png" width="100" height="100"></div>
 
   <img style="   display: block;
     margin-left: auto;
@@ -67,21 +42,11 @@
   </div>
 </div>
 
-<div style="margin-top:30px;" class="container product_details">
-<div id="product_detail">
-<div  class="child_product_details row">
-  <div class="col-md-6">
 
-   </div>
-  <!-- <a href="images/Vision Truck Group Marketing - DJpINt8WsAAbJS5.jpg"><img src="images/Vision Truck Group Marketing - DJpINt8WsAAbJS5.jpg"></a>
-   <a href="http://www.youtube.com/embed/YE7VzlLtp-4"><img src="http://img.youtube.com/vi/YE7VzlLtp-4/2.jpg"></a>-->
-
-     </div>
-     </div>
-</div>
 
 </div>
-
+     <div style="height: 100px; clear: both;"></div>
+</body>
 <!-- JavaScripts-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -129,7 +94,8 @@ $(document).ready(function () {
             var myObj = JSON.parse(this.responseText);
             for(var i=0;i<myObj.length;i++)
             {
-                $("#categories").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card" style="width: 20rem;"><img style="display: block;margin-left: auto;margin-right: auto;max-width:30%;" class="card-img-top" src="images/icon-truck.png" alt="Card image cap"><div style="margin:30px;"class="card-block">        <h4 style="text-align: center;"class="card-title">'+myObj[i].category_name+'</h4><p style="text-align: center;" class="card-text">browse '+myObj[i].category_name+'</p><a href="#" data-id="'+myObj[i].category_name+'" style="display: block;margin-left: auto;margin-right: auto;max-width:30%; text-align: center; color:#12253A;" class="cat_button">Browse</a></div></div></div>');
+          //      console.log(myObj[i].image_path)
+                $("#categories").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card cat_button" data-id="'+myObj[i].category_name+'" style="width: 20rem;"><img style="display: block;margin-left: auto;margin-right: auto;width:auto; height:auto; max-width:100%; max-height:75%;" class="card-img-top" src="./Trucking_NodeJS_Server/uploads/'+myObj[i].image_path+'" alt="Card image cap"><div style="margin:30px;"class="card-block"> <h1 style="text-align: center;"class="card-title">'+myObj[i].category_name+'</h4></div></div></div>');
 
                 //console.log(selected_category);
             }
@@ -170,8 +136,7 @@ if(back!=1){
             if(myObj[i].categorie==categorie_id)
             {
 
-              $("#products").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card" style="margin-top:30px; width: 20rem;"><img style="display: block;margin-left: auto;margin-right: auto;max-width:30%; margin-top:20px;" class="card-img-top" src="images/icon-brake.png" alt="Card image cap"><div style="margin:30px;"class="card-block">        <h4 style="text-align: center;"class="card-title">'+myObj[i].product_name+'</h4><p style="text-align: center;" class="card-text">'+myObj[i].description+'</p><a href="product.html?id='+myObj[i].id+'" data-id="" style="display: block;margin-left: auto;margin-right: auto;max-width:30%; text-align: center; color:#12253A;" class="cat_button">Check Gallery</a></div></div></div>');
-
+              $("#products").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card prod_button" data-id="'+myObj[i].id+'" style="width: 20rem;"><img style="display: block;margin-left: auto;margin-right: auto;width:auto; height:auto; max-width:100%; max-height:75%;" class="card-img-top" src="./Trucking_NodeJS_Server/uploads/'+myObj[i].image_path+'" alt="Card image cap"><div style="margin:30px;"class="card-block"> <h1 style="text-align: center;"class="card-title">'+myObj[i].product_name+'</h4></div></div></div>');
             }
 
           }
@@ -216,7 +181,8 @@ selected_category=$(this).data("id");
               console.log("selected user category is:"+selected_category);
 
             //  $("#products").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card" style="width: 20rem;"><img class="card-img-top" src="assets/img/truck_engine.jpg" alt="Card image cap"><div style="margin:30px;"class="card-block">        <h4 class="card-title">'+myObj[i].product_name+'</h4><p class="card-text">'+myObj[i].description+'</p><a href="product.html?id='+myObj[i].id+'" data-id="" class="btn btn-primary prod_button">See More</a></div></div></div>');
-              $("#products").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card" style="margin-top:30px; width: 20rem;"><img style="display: block;margin-left: auto;margin-right: auto;max-width:30%; margin-top:20px;" class="card-img-top" src="images/icon-brake.png" alt="Card image cap"><div style="margin:30px;"class="card-block">        <h4 style="text-align: center;"class="card-title">'+myObj[i].product_name+'</h4><p style="text-align: center;" class="card-text">'+myObj[i].description+'</p><a href="product.html?id='+myObj[i].id+'" data-id="" style="display: block;margin-left: auto;margin-right: auto;max-width:30%; text-align: center; color:#12253A;" class="cat_button">Check Gallery</a></div></div></div>');
+        //      $("#products").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card" style="margin-top:30px; width: 20rem;"><img style="display: block;margin-left: auto;margin-right: auto;max-width:30%; margin-top:20px;" class="card-img-top" src="images/icon-brake.png" alt="Card image cap"><div style="margin:30px;"class="card-block">        <h4 style="text-align: center;"class="card-title">'+myObj[i].product_name+'</h4><p style="text-align: center;" class="card-text">'+myObj[i].description+'</p><a href="product.html?id='+myObj[i].id+'" data-id="" style="display: block;margin-left: auto;margin-right: auto;max-width:30%; text-align: center; color:#12253A;" class="cat_button">Check Gallery</a></div></div></div>');
+              $("#products").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card prod_button" data-id="'+myObj[i].id+'" style="width: 20rem;"><img style="display: block;margin-left: auto;margin-right: auto;width:auto; height:auto; max-width:100%; max-height:75%;" class="card-img-top" src="./Trucking_NodeJS_Server/uploads/'+myObj[i].image_path+'" alt="Card image cap"><div style="margin:30px;"class="card-block"> <h1 style="text-align: center;"class="card-title">'+myObj[i].product_name+'</h4></div></div></div>');
 
             }
 
@@ -244,7 +210,7 @@ $(".product_browser").hide('bounceInUp animated');
                 $(".child_products").remove();
               for(var i=0;i<myObj.length;i++)
               {
-                  $("#categories").append('<div class="child_products col-xs-6 col-sm-4"><div class="card" style="width: 20rem;"><img style="display: block;margin-left: auto;margin-right: auto;max-width:30%;" class="card-img-top" src="images/icon-truck.png" alt="Card image cap"><div style="margin:30px;"class="card-block">        <h4 style="text-align: center;"class="card-title">'+myObj[i].category_name+'</h4><p style="text-align: center;" class="card-text">browse '+myObj[i].category_name+'</p><a href="#" data-id="'+myObj[i].category_name+'" style="display: block;margin-left: auto;margin-right: auto;max-width:30%; text-align: center; color:#12253A;" class="cat_button">Browse</a></div></div></div>');
+                $("#categories").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card cat_button" data-id="'+myObj[i].category_name+'" style="width: 20rem;"><img style="display: block;margin-left: auto;margin-right: auto;width:auto; height:auto; max-width:100%; max-height:75%;" class="card-img-top" src="./Trucking_NodeJS_Server/uploads/'+myObj[i].image_path+'" alt="Card image cap"><div style="margin:30px;"class="card-block"> <h1 style="text-align: center;"class="card-title">'+myObj[i].category_name+'</h4></div></div></div>');
 
                   //console.log(selected_category);
               }
@@ -254,37 +220,27 @@ $(".product_browser").hide('bounceInUp animated');
       xmlhttp.send();
   });
 ///////////////////////////////////////////////////////clicking for product details/////////////////////
-/*
+
+
+
 $(document).on("click", ".prod_button", function(){
+  var id = $(this).attr("data-id");
+  window.location='product.html?id='+id;
+  /*
+  var url="http://localhost:3000/"
+ var id = $(this).attr("data-id");
+   var category = $(this).attr("data-product");
+ console.log('you selected on '+id);
+ $.ajax({
+   type: 'DELETE',
+   url: url+'delete_media_img/' + id,
+   success: function(data){
+     //do something with the data via front-end framework
+     location.reload();
+   }
+ });*/
+});
 
-console.log($(this).data("id"));
-selected_product=$(this).data("id");
-  $(".product_browser").hide('bounceInUp animated');
-  $(".product_detail").show('bounceInUp animated');
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-          var myObj = JSON.parse(this.responseText);
-
-          //$(".child_product_details").remove();
-          for(var i=0;i<myObj.length;i++)
-          {
-
-            if(myObj[i].id==selected_product)
-            {
-              console.log("selected product is:"+myObj[i].product_name);
-
-              $(".child_product_details").append('<div class="col-md-6 product_description_name"><h4 class="row">'+myObj[i].product_name+'</h4><p class="row">'+myObj[i].description+'</p></div>');
-
-            }
-
-          }
-
-      }
-  };
-  xmlhttp.open("GET", "http://"+ip+":3000/Products", true);
-  xmlhttp.send();
-});*/
 ///////////////////////////////////////////////////////parent layout/////////////////////
 $(".parent_layout").click(function () {
 clearTimeout(myVar);
@@ -314,7 +270,13 @@ var myVar;
       }, 500000);
   });
 
-
+  $(window).scroll(function() {
+     if($(window).scrollTop() + $(window).height() == $(document).height()) {
+      $(".bottom_indicator").hide();
+    }else{
+        $(".bottom_indicator").show();
+    }
+  });
 
 
 
@@ -344,6 +306,33 @@ var myVar;
 
 div.card {
   box-shadow: 0 16px 18px 0 rgba(0, 0, 0, 0.2), 0 30px 50px 0 rgba(0, 0, 0, 0.19);
+  margin-top: 1em;
+  height: 333px;
 }
 
+/* width
+::-webkit-scrollbar {
+  width: 32px;
+	background-color: #F5F5F5;
+  margin-right: 1.5em;
+
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #D62929;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  border-radius: 20px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #D62939;
+}*/
 </style>
