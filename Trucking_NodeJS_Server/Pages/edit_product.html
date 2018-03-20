@@ -168,7 +168,9 @@ xmlhttp.onreadystatechange = function() {
       cell1.innerHTML = myObj[i].product_name;
       cell2.innerHTML = myObj[i].image;
       cell3.innerHTML ="<a href='#' id='delete_product' data-id="+myObj[i].id+" data-product="+myObj[i].product_name+">Delete</a>";
-      cell4.innerHTML ="<a id='edit_gallery' href=''>Edit Gallery</a>";
+      //cell4.innerHTML ="<a id='edit_gallery' href=''>Edit Gallery</a>";
+      cell4.innerHTML ="<a id='edit_gallery' href='http://localhost:3000/gallery?id="+myObj[i].id+"&category="+category_selected+"'>Edit Products</a>";
+
       //cell5.innerHTML ="<form method='post'><input name='del_value' value="+myObj[i].id+" class='form-control'><input class='deletetable' type='submit' value='Delete' class='btn btn-primary'></input></form>";
     }
 

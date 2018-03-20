@@ -25,7 +25,10 @@
 
 <div id="gallery" style="display:none; margin-top:100px; width:100%;">
 
-
+	<!--<div data-type="youtube"
+						 data-videoid="A3PDXmYoF5U"
+						 data-title="GoPro Demo"
+						 data-description="by Go Pro"></div>-->
 
 
  </div>
@@ -84,7 +87,7 @@ xmlhttp.onreadystatechange = function() {
 
     }
 };
-xmlhttp.open("GET", "http://"+ip+":3000/Products", true);
+xmlhttp.open("GET", "http://"+ip+":3000/fetch_products", true);
 xmlhttp.send();
 
 var xmlhttp = new XMLHttpRequest();
@@ -100,7 +103,7 @@ xmlhttp.onreadystatechange = function() {
           {
             if(myObj[i].type=="img")
             {
-              $("#gallery").append('  <img alt="'+myObj[i].title+'" src="'+myObj[i].href+'" data-image="'+myObj[i].src+'" data-description="'+myObj[i].description+'">');
+              $("#gallery").append('  <img alt="'+myObj[i].title+'" src="./Trucking_NodeJS_Server/uploads/'+myObj[i].src+'" data-image="./Trucking_NodeJS_Server/uploads/'+myObj[i].src+'" data-description="'+myObj[i].description+'">');
 
 
             }else if(myObj[i].type=="youtube")
@@ -149,7 +152,7 @@ xmlhttp.onreadystatechange = function() {
       });
     }
 };
-xmlhttp.open("GET", "http://"+ip+":3000/Product_medias", true);
+xmlhttp.open("GET", "http://"+ip+":3000/fetch_products_media", true);
 xmlhttp.send();
 
 </script>

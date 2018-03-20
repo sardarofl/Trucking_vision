@@ -17,6 +17,14 @@ var app = express();
  app.use(bodyParser.urlencoded({ extended: true }));
  app.use(bodyParser.json());
 
+ app.use(function(req, res, next) {
+     res.header("Access-Control-Allow-Origin", "*");
+ 		res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+     next();
+ });
+
+
 	var filename_path;
 	var storage =   multer.diskStorage({
 	  destination: function (req, file, callback) {
@@ -29,6 +37,8 @@ var app = express();
 	});
 
 	var upload = multer({ storage : storage}).single('image');
+
+	//add category image and data
 	app.post('/add_category',function(req,res){
 
 
@@ -54,7 +64,7 @@ var app = express();
 
 	    });
 	});
-	/////////add product
+	/////////add product image and data
 	app.post('/add_product',function(req,res){
 
 
@@ -68,8 +78,8 @@ var app = express();
 					console.log(item);
 					console.log(pass);
 					console.log(cat);
-
-					connection.query("INSERT INTO products (`product_name`,`categorie`, `image`,`image_path`) VALUES ('"+item+"','"+cat+"','"+pass+"','"+filename_path+"')", function (err, result) {
+					//'INSERT INTO products product_name = ?, categorie = ?, image = ?, image_path = ?', [item, cat, pass, userId]
+					connection.query('INSERT INTO products product_name = ?, categorie = ?, image = ?, image_path = ?', [item, cat, pass, userId], function (err, result) {
 						if (err) throw err;
 						//	 res.json(data);
 					});
@@ -85,16 +95,43 @@ var app = express();
 			});
 	});
 
-
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-		res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+//add multiple images for gallery
+	app.post('/add_gallery',function(req,res){
 
 
+			upload(req,res,function(err) {
+						var data = {
+					"Data":""
+				};
 
+				console.log("id: "+req.body.item);
+				console.log("Original Name: "+req.file.originalname);
+				console.log("Filename Name: "+req.file.filename);
+				var id=req.body.item;
+				var org_name = req.file.originalname;
+				var file_name = req.file.filename;
+
+
+					connection.query("INSERT INTO product_media (`id`,`href`, `src`,`type`,`title`,`description`) VALUES ('"+id+"','"+org_name+"','"+file_name+"','img','','')", function (err, result) {
+						if (err) throw err;
+						//	 res.json(data);
+					});
+
+
+
+					if(err) {
+								console.log(err);
+							return res.end("Error uploading file.");
+
+					}
+						console.log('File uploaded');
+					res.end("File is uploaded");
+
+			});
+	});
+
+
+//fetch
 app.get('/fetch_categories',function(req,res){
 	connection.query("SELECT * from categories",function(err, rows, fields){
 		if(rows.length != 0){
@@ -115,8 +152,9 @@ app.get('/fetch_products/:category',function(req,res){
 	});
 });
 
-app.get('/fetch_products_media',function(req,res){
-	connection.query("SELECT * from products_media",function(err, rows, fields){
+app.get('/fetch_products',function(req,res){
+	//console.log(connection.query("SELECT * from products WHERE categorie='"+category+"'"));
+	connection.query("SELECT * from products",function(err, rows, fields){
 		if(rows.length != 0){
 			res.json(rows);
 		}else{
@@ -124,8 +162,45 @@ app.get('/fetch_products_media',function(req,res){
 	});
 });
 
+app.get('/fetch_products_media',function(req,res){
+	connection.query("SELECT * from product_media",function(err, rows, fields){
+		if(rows.length != 0){
+			res.json(rows);
+		}else{
+		}
+	});
+});
 
+app.get('/fetch_products_media/:id',function(req,res){
+		var id = req.params.id;
+	//connection.query("SELECT * from product_media",function(err, rows, fields){
+	connection.query("SELECT * from product_media WHERE id='"+id+"'",function(err, rows, fields){
+		if(rows.length != 0){
+			res.json(rows);
+		}else{
+		}
+	});
+});
+///set
+	app.post('/set_desc_title',function(req, res){
+			var title = req.body.title;
+			var desc = req.body.desc;
+			var id = req.body.id;
+			console.log(req);
+		var data = {
+			"Data":""
+		};
 
+		console.log(id);
+		connection.query("UPDATE product_media SET title = '"+title+"', description = '"+desc+"' WHERE src LIKE'%"+id+"%'", function (err, result) {
+
+		//connection.query("UPDATE FROM categories WHERE id = '"+item+"'", function (err, result) {
+	 	 if (err) throw err;
+		 res.json(data);
+	  });
+
+	});
+///delete
 	app.delete('/delete_category/:id',function(req, res){
 			var item = req.params.id;
 		var data = {
@@ -149,7 +224,17 @@ app.get('/fetch_products_media',function(req,res){
 	  });
 
 	});
+	app.delete('/delete_media_img/:id',function(req, res){
+			var item = req.params.id;
+		var data = {
+			"Data":""
+		};
+		connection.query("DELETE FROM product_media WHERE src = '"+item+"'", function (err, result) {
+	 	 if (err) throw err;
+		 res.json(data);
+	  });
 
+	});
 
 
 //paths
@@ -161,6 +246,9 @@ app.get('/edit',function(req,res){
   res.sendFile(path.join(__dirname+'/Pages/edit_product.html'));
 });
 
+app.get('/gallery',function(req,res){
+  res.sendFile(path.join(__dirname+'/Pages/edit_product_gallery.html'));
+});
 
 app.listen(3000,function(){
 	console.log(`Connected & Listen to 3000`);

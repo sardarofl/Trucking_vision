@@ -135,7 +135,7 @@ $(document).ready(function () {
             }
         }
     };
-    xmlhttp.open("GET", "http://"+ip+":3000/Categories", true);
+    xmlhttp.open("GET", "http://"+ip+":3000/fetch_categories", true);
     xmlhttp.send();
 });
 
@@ -178,7 +178,7 @@ if(back!=1){
 
       }
   };
-  xmlhttp.open("GET", "http://"+ip+":3000/Products", true);
+  xmlhttp.open("GET", "http://"+ip+":3000/fetch_products", true);
   xmlhttp.send();
 }
 
@@ -224,7 +224,7 @@ selected_category=$(this).data("id");
 
       }
   };
-  xmlhttp.open("GET", "http://"+ip+":3000/Products", true);
+  xmlhttp.open("GET", "http://"+ip+":3000/fetch_products/"+selected_category, true);
   xmlhttp.send();
 });
 
@@ -250,7 +250,7 @@ $(".product_browser").hide('bounceInUp animated');
               }
           }
       };
-      xmlhttp.open("GET", "http://"+ip+":3000/Categories", true);
+      xmlhttp.open("GET", "http://"+ip+":3000/fetch_categories", true);
       xmlhttp.send();
   });
 ///////////////////////////////////////////////////////clicking for product details/////////////////////
@@ -296,7 +296,7 @@ myVar = setTimeout(function() {
   $(".child_products").remove();
   $(".product_description_name").remove();
 
-}, 5000);
+}, 500000);
 });
 
 
@@ -311,7 +311,7 @@ var myVar;
         $(".child_products").remove();
         $(".product_description_name").remove();
 
-      }, 5000);
+      }, 500000);
   });
 
 
