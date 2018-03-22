@@ -39,36 +39,24 @@
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+
                 <a class="navbar-brand" href="index.html">Vision Trucking</a>
             </div>
             <!-- /.navbar-header -->
 
               <!-- /.navbar-top-links -->
 
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
 
-                        <li>
-                            <a href="admin.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
-                        </li>
-
-                    </ul>
-                </div>
-                <!-- /.sidebar-collapse -->
-            </div>
             <!-- /.navbar-static-side -->
         </nav>
 
         <!-- Page Content -->
         <div id="page-wrapper">
             <div class="container-fluid">
+            </br>
+                <div class="row">
+                    <button id="back_to_edit" class="custom_button" >Back</button>
+                </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 id="category_identifier" class="page-header">Edit Gallery</h1>
@@ -84,27 +72,60 @@
            <div>
              <button type="submit" name="upload">Submit</button>
            </div>
+
          </form>-->
-         <div>Upload images to Gallery Below:</div>
-           <div name="image" id="multipleupload">Upload</div>
+         <div class="tab">
+          <button class="tablinks" onclick="openComponent(event, 'Gallery')" id="gallery">Gallery</button>
+          <button class="tablinks" onclick="openComponent(event, 'Youtube')" id="video">Youtube</button>
+          </div>
+          <div id="Gallery" class="tabcontent">
+            <div>Upload images to Gallery Below:</div>
+              <div name="image" id="multipleupload">Upload</div>
 
-           <table id="trucking_products" style="width:100%">
-             <tr>
-             <th>Thumbnail</th>
-             <th>Name</th>
-             <th>Description</th>
-             <th>Title</th>
-             <th>Set</th>
-             <th>Delete</th>
-             </tr>
-             <tr>
-             <td ></td>
-             <td ></td>
-             <td ></td>
-             <td ></td>
-             </tr>
+              <table id="trucking_products" style="width:100%">
+                <tr>
+                <th>Thumbnail</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Title</th>
+                <th>Set</th>
+                <th>Delete</th>
+                </tr>
+                <tr>
+                <td ></td>
+                <td ></td>
+                <td ></td>
+                <td ></td>
+                </tr>
 
-           </table>
+              </table>
+          </div>
+          <div id="Youtube" class="tabcontent">
+            <div>Add Youtube Videos to Gallery:</div>
+            <form method="POST"   enctype="multipart/form-data">
+                 <input id="field_youtube" name="youtube_description" class="form-control" placeholder="Description">
+                 <input id="field_youtube_link" name="youtube_link" class="form-control"  placeholder="Enter the Youtube Link">
+
+                <div>
+                  <button type="submit" id="submit_ytvideo" name="upload">Submit</button>
+                </div>
+              </form>
+              <table id="trucking_youtube" style="width:100%">
+                <tr>
+                <th>URL</th>
+                <th>Description</th>
+                <th>Delete</th>
+                </tr>
+                <tr>
+                <td ></td>
+                <td ></td>
+                <td ></td>
+                <td ></td>
+                </tr>
+
+              </table>
+          </div>
+
 
 					</div>
           <div class="row">
@@ -137,8 +158,10 @@
 <script src="../vendor/jquery/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
-<link href="http://hayageek.github.io/jQuery-Upload-File/4.0.11/uploadfile.css" rel="stylesheet">
-<script src="http://hayageek.github.io/jQuery-Upload-File/4.0.11/jquery.uploadfile.min.js"></script>
+<!--<link href="http://hayageek.github.io/jQuery-Upload-File/4.0.11/uploadfile.css" rel="stylesheet">
+<script src="http://hayageek.github.io/jQuery-Upload-File/4.0.11/jquery.uploadfile.min.js"></script>-->
+  <link href="../dist/css/uploadfile.css" rel="stylesheet">
+  <script src="../dist/js/jquery.uploadfile.min.js"></script>
 <script>
 
 $(document).ready(function(){
@@ -161,6 +184,19 @@ $(document).ready(function(){
 
   var category_selected = getUrlParameter('category');
   var id_selected = getUrlParameter('id');
+  var tab = getUrlParameter('tab');
+
+console.log(tab);
+if(tab== null)
+{
+  tab="gallery";
+}
+document.getElementById(tab).click();
+
+  $(document).on("click", "#back_to_edit", function(){
+    window.location.href = "http://localhost:3000/edit?id="+id_selected+"&category="+category_selected+"";
+    console.log("clicked");
+  });
   //document.getElementById("category_name").value = category_selected;
   document.getElementById("category_identifier").innerHTML = "Edit Products for '"+category_selected+"' category";
 
@@ -170,15 +206,47 @@ $(document).ready(function(){
    formData: { item:id_selected  },
    multiple:true,
    dragDrop:true,
+   allowedTypes:"jpg,png,jpeg",
    fileName:"image",
   afterUploadAll:function(obj)
     {
     //You can get data of the plugin using obj
     console.log(obj);
-     success:location.reload();
+      insertParam("tab", "gallery");
+    // success:location.reload();
    }
 
    });
+
+   $('form').on('submit', function(){
+     console.log("I clickedseru");
+      //var id_selected = getUrlParameter('id');
+       var field_youtube = $('#field_youtube').val();
+       var field_youtube_link = $('#field_youtube_link').val();
+       var field_youtube_link_parsed = youtube_parser(field_youtube_link);
+      var new_youtube_link = {id:id_selected ,link: field_youtube_link_parsed,desc:field_youtube};
+
+      // var new_youtube_link = {data:[{id: id_selected},{link: field_youtube_link},{desc: field_youtube}]};
+       console.log(isYoutube(field_youtube_link));
+       if(isYoutube(field_youtube_link)){  $.ajax({
+           type: "POST",
+           url: 'http://localhost:3000/add_video',
+           data:JSON.parse(JSON.stringify(new_youtube_link)),
+           dataType: 'json',
+           success: function(data){
+             //do something with the data via front-end framework
+        //    location.reload();
+          //  alert("added video");
+            insertParam("tab", "video");
+           }
+         });
+       }else{
+         alert("You entered an invalid Youtube link");
+       }
+
+     return false;
+  });
+
 
 
 /////////////////set data to above fields////////////////////////////////////////////
@@ -188,6 +256,8 @@ xmlhttp.onreadystatechange = function() {
     var myObj = JSON.parse(this.responseText);
     for(var i=0;i<myObj.length;i++)
     {
+      if(myObj[i].type=="img")
+      {
       var table = document.getElementById("trucking_products");
       var row = table.insertRow();
 
@@ -215,6 +285,18 @@ xmlhttp.onreadystatechange = function() {
       cell4.innerHTML = "<input type='text' id='"+numb+"' value='"+title+"'></input>";
       cell5.innerHTML ="<a href='#' id='delete_img' data-id="+myObj[i].src+">Delete</a>";
       cell6.innerHTML ="<a href='#' id='set_description' data-id="+numb+" data-desc="+numbdesc+">Set</a>";
+    }else if(myObj[i].type=="youtube"){
+      var table = document.getElementById("trucking_youtube");
+      var row = table.insertRow();
+
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+      var cell3 = row.insertCell(2);
+
+      cell1.innerHTML = "<a href='https://www.youtube.com/watch?v="+myObj[i].href+"' target='_blank'>"+myObj[i].href+"</a>";
+      cell2.innerHTML = myObj[i].description;
+      cell3.innerHTML ="<a href='#' id='delete_video' data-id="+myObj[i].src+">Delete</a>";
+    }
     }
 
   }
@@ -228,41 +310,40 @@ xmlhttp.send();
 
 
 <script>
-function youtube_parser(url){
+var youtube_parser= function youtube_parser(url){
+  console.log(url);
     var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
     var match = url.match(regExp);
     return (match&&match[7].length==11)? match[7] : false;
 }
+
+var isYoutube = function isYoutube(getURL){
+  var url = getURL;
+if (url != undefined || url != '') {
+    var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+    var match = url.match(regExp);
+    if (match && match[2].length == 11) {
+        // Do anything for being valid
+        // if need to change the url to embed url then use below line
+
+        return true;
+
+
+    } else {
+
+        return false;
+        // Do anything for not being valid
+    }
+}
+}
+
 </script>
 
   <script>
   //POSTING
   $(document).ready(function(){
     var url="http://localhost:3000/"
-    $('form').on('submit', function(){
-      console.log("I clicked");
 
-        var prod_field = $('#field_product');
-        var img_field = $('#image_name');
-        var cat_field = $('#category_name');
-        var actual_file = $('#image_name').get(0).files;
-        var filename = img_field.val().replace(/^.*\\/, "");
-        console.log(actual_file);
-        var new_product = {data:[{item: prod_field.val()},{item: filename},{item: cat_field.val()}]};
-        console.log(new_product);
-
-
-        $(this).ajaxSubmit({
-        url: '/add_product',
-        data: new_product,
-        success: function(data){
-              alert("Product "+prod_field.val()+" Added.");
-              location.reload();
-        }
-      });
-        return false;
-
-    });
 
 });
 
@@ -279,6 +360,21 @@ function youtube_parser(url){
       location.reload();
     }
   });
+});
+
+$(document).on("click", "#delete_video", function(){
+  var url="http://localhost:3000/"
+ var id = $(this).attr("data-id");
+   var category = $(this).attr("data-product");
+ console.log('you selected on '+id);
+ $.ajax({
+   type: 'DELETE',
+   url: url+'delete_media_video/' + id,
+   success: function(data){
+     //do something with the data via front-end framework
+     location.reload();
+   }
+ });
 });
 
 $(document).on("click", "#set_description", function(){
@@ -306,6 +402,52 @@ $(document).on("click", "#set_description", function(){
 });
 
   </script>
+
+  <script>
+  function openComponent(evt, ComponentName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+          tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(ComponentName).style.display = "block";
+      evt.currentTarget.className += " active";
+
+  }
+//  document.getElementById("defaultOpen").click();
+
+
+
+  function insertParam(key, value)
+{
+    key = encodeURI(key); value = encodeURI(value);
+
+    var kvp = document.location.search.substr(1).split('&');
+
+    var i=kvp.length; var x; while(i--)
+    {
+        x = kvp[i].split('=');
+
+        if (x[0]==key)
+        {
+            x[1] = value;
+            kvp[i] = x.join('=');
+            break;
+        }
+    }
+
+    if(i<0) {kvp[kvp.length] = [key,value].join('=');}
+
+    //this will reload the page, it's likely better to store this until finished
+   document.location.search = kvp.join('&');
+}
+
+  </script>
+
 </html>
 
 
@@ -317,5 +459,88 @@ table, th, td {
 
 
 
+
+</style>
+
+<style>
+body {font-family: Arial;}
+
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+
+.custom_button {
+	-moz-box-shadow:inset 0px -3px 7px 0px #29bbff;
+	-webkit-box-shadow:inset 0px -3px 7px 0px #29bbff;
+	box-shadow:inset 0px -3px 7px 0px #29bbff;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #2dabf9), color-stop(1, #0688fa));
+	background:-moz-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:-webkit-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:-o-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:-ms-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:linear-gradient(to bottom, #2dabf9 5%, #0688fa 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#2dabf9', endColorstr='#0688fa',GradientType=0);
+	background-color:#2dabf9;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	border:1px solid #0b0e07;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	padding:9px 23px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #263666;
+}
+.custom_button:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #0688fa), color-stop(1, #2dabf9));
+	background:-moz-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:-webkit-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:-o-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:-ms-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:linear-gradient(to bottom, #0688fa 5%, #2dabf9 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#0688fa', endColorstr='#2dabf9',GradientType=0);
+	background-color:#0688fa;
+}
+.custom_button:active {
+	position:relative;
+	top:1px;
+}
 
 </style>

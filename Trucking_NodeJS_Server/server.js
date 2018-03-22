@@ -30,6 +30,7 @@ var app = express();
 	  destination: function (req, file, callback) {
 	    callback(null, './uploads');
 	  },
+
 	  filename: function (req, file, callback) {
 			filename_path=file.fieldname + '-' + Date.now()+path.extname(file.originalname);
 	    callback(null, file.fieldname + '-' + Date.now()+path.extname(file.originalname));
@@ -107,7 +108,7 @@ var app = express();
 					"Data":""
 				};
 
-				console.log("id: "+req.body.item);
+				console.log("id: "+req.body.id);
 				console.log("Original Name: "+req.file.originalname);
 				console.log("Filename Name: "+req.file.filename);
 				var id=req.body.item;
@@ -131,6 +132,25 @@ var app = express();
 					res.end("File is uploaded");
 
 			});
+	});
+	//add video
+		app.post('/add_video',function(req,res){
+	console.log(req);
+			var id = req.body.id;
+			var link = req.body.link;
+			var desc = req.body.desc;
+			var data = {
+			"Data":""
+		};
+
+		console.log(id);
+		connection.query("INSERT INTO product_media (`id`,`href`, `src`,`type`,`title`,`description`) VALUES ('"+id+"','"+link+"','"+link+"','youtube','"+desc+"','"+desc+"')", function (err, result) {
+
+		//connection.query("UPDATE FROM categories WHERE id = '"+item+"'", function (err, result) {
+		 if (err) throw err;
+		 res.json(data);
+	 });
+
 	});
 
 
@@ -204,15 +224,26 @@ app.get('/fetch_products_media/:id',function(req,res){
 
 	});
 ///delete
-	app.delete('/delete_category/:id',function(req, res){
+	app.delete('/delete_category/:id/:category',function(req, res){
 			var item = req.params.id;
+			var category = req.params.category
 		var data = {
 			"Data":""
 		};
 		connection.query("DELETE FROM categories WHERE id = '"+item+"'", function (err, result) {
 	 	 if (err) throw err;
-		 res.json(data);
+
 	  });
+		console.log(category);
+		connection.query("DELETE FROM products WHERE categorie = '"+category+"'", function (err, result) {
+		 if (err) throw err;
+
+		});
+
+		connection.query("DELETE FROM product_media WHERE id = '"+item+"'", function (err, result) {
+		 if (err) throw err;
+		 res.json(data);
+		});
 
 	});
 
@@ -223,10 +254,17 @@ app.get('/fetch_products_media/:id',function(req,res){
 		};
 		connection.query("DELETE FROM products WHERE id = '"+item+"'", function (err, result) {
 	 	 if (err) throw err;
-		 res.json(data);
+
 	  });
 
+		connection.query("DELETE FROM product_media WHERE id = '"+item+"'", function (err, result) {
+		 if (err) throw err;
+		 res.json(data);
+		});
+
 	});
+
+
 	app.delete('/delete_media_img/:id',function(req, res){
 			var item = req.params.id;
 		var data = {
@@ -239,6 +277,17 @@ app.get('/fetch_products_media/:id',function(req,res){
 
 	});
 
+	app.delete('/delete_media_video/:id',function(req, res){
+			var item = req.params.id;
+		var data = {
+			"Data":""
+		};
+		connection.query("DELETE FROM product_media WHERE src = '"+item+"'", function (err, result) {
+	 	 if (err) throw err;
+		 res.json(data);
+	  });
+
+	});
 
 //paths
 app.get('/',function(req,res){

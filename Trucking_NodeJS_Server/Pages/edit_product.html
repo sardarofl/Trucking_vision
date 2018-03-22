@@ -39,36 +39,24 @@
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+
                 <a class="navbar-brand" href="index.html">Vision Trucking</a>
             </div>
             <!-- /.navbar-header -->
 
               <!-- /.navbar-top-links -->
 
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
 
-                        <li>
-                            <a href="admin.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
-                        </li>
-
-                    </ul>
-                </div>
-                <!-- /.sidebar-collapse -->
-            </div>
             <!-- /.navbar-static-side -->
         </nav>
 
         <!-- Page Content -->
         <div id="page-wrapper">
             <div class="container-fluid">
+            </br>
+                <div class="row">
+                    <button id="back_to_categories" class="custom_button" >Back</button>
+                </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 id="category_identifier" class="page-header">Edit Product</h1>
@@ -78,14 +66,17 @@
             <form method="POST"   enctype="multipart/form-data">
             <input id="field_product" name="product" class="form-control" placeholder="Enter a new Product Name">
            <input id="category_name" type="hidden" name="category" value="">
+           </br>
            <div>
              <input id="image_name" type="file" name="image">
            </div>
+           </br>
            <div>
-             <button type="submit" name="upload">Submit</button>
+             <button class="custom_button" type="submit" name="upload">Submit</button>
            </div>
-           </form>
 
+           </form>
+         </br>
            <table id="trucking_products" style="width:100%">
              <tr>
              <th>Product Name</th>
@@ -167,7 +158,7 @@ xmlhttp.onreadystatechange = function() {
       // Add some text to the new cells:
       cell1.innerHTML = myObj[i].product_name;
       cell2.innerHTML = myObj[i].image;
-      cell3.innerHTML ="<a href='#' id='delete_product' data-id="+myObj[i].id+" data-product="+myObj[i].product_name+">Delete</a>";
+      cell3.innerHTML ="<a href='#' id='delete_product' data-id="+myObj[i].id+" data-product="+encodeURIComponent(myObj[i].product_name.trim())+">Delete</a>";
       //cell4.innerHTML ="<a id='edit_gallery' href=''>Edit Gallery</a>";
       cell4.innerHTML ="<a id='edit_gallery' href='http://localhost:3000/gallery?id="+myObj[i].id+"&category="+category_selected+"'>Edit Products</a>";
 
@@ -221,14 +212,25 @@ xmlhttp.send();
   var id = $(this).attr("data-id");
     var category = $(this).attr("data-product");
   console.log('you selected on '+id);
-  $.ajax({
-    type: 'DELETE',
-    url: url+'delete_product/' + id,
-    success: function(data){
-      //do something with the data via front-end framework
-      location.reload();
-    }
-  });
+  if (confirm("Are you sure you want to delete "+decodeURIComponent(category)+" product? All dependencies will be deleted!") == true) {
+    $.ajax({
+      type: 'DELETE',
+      url: url+'delete_product/' + id,
+      success: function(data){
+        //do something with the data via front-end framework
+        location.reload();
+      }
+    });
+  } else{
+    //do nothing
+  }
+
+});
+
+
+$(document).on("click", "#back_to_categories", function(){
+  var url="http://localhost:3000/";
+  window.location.href = url;
 });
 
   </script>
@@ -240,6 +242,47 @@ table, th, td {
     border: 1px solid black;
 	text-align:center;
 }
+
+.custom_button {
+	-moz-box-shadow:inset 0px -3px 7px 0px #29bbff;
+	-webkit-box-shadow:inset 0px -3px 7px 0px #29bbff;
+	box-shadow:inset 0px -3px 7px 0px #29bbff;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #2dabf9), color-stop(1, #0688fa));
+	background:-moz-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:-webkit-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:-o-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:-ms-linear-gradient(top, #2dabf9 5%, #0688fa 100%);
+	background:linear-gradient(to bottom, #2dabf9 5%, #0688fa 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#2dabf9', endColorstr='#0688fa',GradientType=0);
+	background-color:#2dabf9;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	border:1px solid #0b0e07;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	padding:9px 23px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #263666;
+}
+.custom_button:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #0688fa), color-stop(1, #2dabf9));
+	background:-moz-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:-webkit-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:-o-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:-ms-linear-gradient(top, #0688fa 5%, #2dabf9 100%);
+	background:linear-gradient(to bottom, #0688fa 5%, #2dabf9 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#0688fa', endColorstr='#2dabf9',GradientType=0);
+	background-color:#0688fa;
+}
+.custom_button:active {
+	position:relative;
+	top:1px;
+}
+
 
 
 
