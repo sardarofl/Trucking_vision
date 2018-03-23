@@ -161,21 +161,18 @@ xmlhttp.send();
         console.log(actual_file);
         var new_category = {data:[{item: cat_field.val()},{item: filename}]};
         console.log(new_category);
-<<<<<<< HEAD
+
 		    $('#overlay_loading').show();
-=======
-    $('#loading_spinner').show();
->>>>>>> 81bc1bce26a9770dcdaa8bf7bf02d9af04996025
+
+
         $(this).ajaxSubmit({
         url: '/add_category',
         data: new_category,
         success: function(data){
               alert("Category "+cat_field.val()+" Added.");
-<<<<<<< HEAD
+
 			      $('#overlay_loading').hide();
-=======
-                $('#loading_spinner').hide();
->>>>>>> 81bc1bce26a9770dcdaa8bf7bf02d9af04996025
+
               location.reload();
 
         }
@@ -189,21 +186,17 @@ xmlhttp.send();
     var category = $(this).attr("data-category");
   console.log('you selected on '+category);
   if (confirm("Are you sure you want to delete "+decodeURIComponent(category)+" category? All dependencies will be deleted!") == true) {
-<<<<<<< HEAD
+
       $('#overlay_loading').show();
-=======
-    $('#loading_spinner').show();
->>>>>>> 81bc1bce26a9770dcdaa8bf7bf02d9af04996025
+
   $.ajax({
     type: 'DELETE',
     url: url+'delete_category/' + id+'/'+category,
     success: function(data){
       //do something with the data via front-end framework
-<<<<<<< HEAD
+
 	      $('#overlay_loading').hide();
-=======
-      $('#loading_spinner').hide();
->>>>>>> 81bc1bce26a9770dcdaa8bf7bf02d9af04996025
+
       location.reload();
     }
   });
@@ -259,10 +252,8 @@ table, th, td {
 	position:relative;
 	top:1px;
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> 81bc1bce26a9770dcdaa8bf7bf02d9af04996025
+
 #overlay_loading {
 display:none;
 position:fixed;
@@ -285,10 +276,5 @@ color:white;
    vertical-align: middle;
    line-height: normal;
 }
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 81bc1bce26a9770dcdaa8bf7bf02d9af04996025
 
 </style>
