@@ -1,4 +1,5 @@
-
+<!DOCTYPE html>
+<body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 
@@ -17,6 +18,7 @@
 .img-container { background-color: #000000; }
             .img-container img { opacity: 0.5; }
 </style>
+
 <a href=""  id="link"style="position:fixed; z-index:3; width:50px; margin:20px;  height:50px;"><img border="0" alt="W3Schools" src="./images/left-arrow (1).png" width="100" height="100"></a>
 <div class="product_details row">
 <div class="col-md-12">
@@ -39,12 +41,13 @@
 <!--<div class="col-md-6 product_description_name" style="font-size:3em;">-->
 
 </div>
+</body>
 </div>
 
 <script>
 
 
-var ip='localhost';
+var ip='50.63.165.6';
 var getUrlParameter = function getUrlParameter(sParam) {
     var sPageURL = decodeURIComponent(window.location.search.substring(1)),
         sURLVariables = sPageURL.split('&'),
@@ -108,8 +111,8 @@ xmlhttp.onreadystatechange = function() {
 
             }else if(myObj[i].type=="youtube")
             {
-                $("#gallery").append('<div data-type="youtube"data-title="'+myObj[i].title+'" data-description="'+myObj[i].description+'"data-thumb="'+myObj[i].href+'" data-image="'+myObj[i].href+'"data-videoid="'+myObj[i].src+'" ></div>  }');
-
+              //  $("#gallery").append('<div data-type="youtube"data-title="'+myObj[i].title+'" data-description="'+myObj[i].description+'"data-thumb="'+myObj[i].href+'" data-image="'+myObj[i].href+'"data-videoid="'+myObj[i].src+'" ></div>  }');
+								$("#gallery").append('<div data-type="youtube" data-videoid="'+myObj[i].href+'" data-title="'+myObj[i].description+'" data-description="'+myObj[i].description+'"></div>}');
           //  $("#gallery").append('<a href="'+myObj[i].href+'"><img src="'+myObj[i].src+'"></a>');
 
           }
@@ -155,4 +158,19 @@ xmlhttp.onreadystatechange = function() {
 xmlhttp.open("GET", "http://"+ip+":3000/fetch_products_media", true);
 xmlhttp.send();
 
+
+	$(document).ready(function () {
+
+		myVar = setTimeout(function() {
+			window.location='index.html';
+			}, 300000);
+
+	});
+
+$("body").click(function () {
+	clearTimeout(myVar);
+	myVar = setTimeout(function() {
+	  window.location='index.html';
+		}, 300000);
+});
 </script>

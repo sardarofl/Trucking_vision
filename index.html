@@ -4,7 +4,12 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <div style="position:fixed; margin-top:-30px; height:100%; width:100%; z-index:-2; background-image:url('images/page-home-1.jpg');"></div>
 <div class="container-fluid media-slides">
-  <video id="myVideo" loop autoplay>
+  <div class="video_overlay">
+  <p style="margin-top:10px;">
+    Touch the screen to explore more!
+  </p>
+  </div>
+  <video id="myVideo" loop autoplay muted>
      <source  src="assets/video/video2.mp4" type="video/mp4">
      Your browser does not support the video tag.
    </video>
@@ -17,10 +22,7 @@
 <div style="margin-top:30px;" class="container category_browser">
   <div class="bottom_indicator" style="position:fixed; z-index:3;  position: fixed; bottom: 1.6em; left:90%; width: 100%;"><img class="back_button" border="0" alt="W3Schools" src="./images/bottom-arrow.png" width="100" height="100"></div>
 
-  <img style="   display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 40%;" src="images/Vision Truck Group Marketing - Logo Png.png" alt="Avatar">
+  <img style="display: block;margin-left: auto;margin-right: auto;width: 40%;" src="images/Vision Truck Group Marketing - Logo Png.png" alt="Avatar">
 
   <div id="categories" class="row">
 
@@ -32,10 +34,7 @@
 <div style="margin-top:30px;" class="container product_browser">
   <div class="bottom_indicator" style="position:fixed; z-index:3;  position: fixed; bottom: 1.6em; left:90%; width: 100%;"><img class="back_button" border="0" alt="W3Schools" src="./images/bottom-arrow.png" width="100" height="100"></div>
 
-  <img style="   display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 40%;" src="images/Vision Truck Group Marketing - Logo Png.png" alt="Avatar">
+  <img style="display: block; margin-left: auto; margin-right: auto;width: 40%;" src="images/Vision Truck Group Marketing - Logo Png.png" alt="Avatar">
 
   <div id="products" class="row">
 
@@ -54,7 +53,7 @@
 
 <script type="text/javascript">
 
-var ip='localhost';
+var ip='50.63.165.6';
 var selected_category='Null';
 var selected_product='Null';
 
@@ -78,6 +77,27 @@ var getUrlParameter = function getUrlParameter(sParam) {
         }
     }
 };
+
+var loadCategoriesAfterMedia =function loadCategoriesAfterMedia() {
+
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+          var myObj = JSON.parse(this.responseText);
+          for(var i=0;i<myObj.length;i++)
+          {
+        //      console.log(myObj[i].image_path)
+              $("#categories").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card cat_button" data-id="'+myObj[i].category_name+'" style="width: 20rem;"><img style="display: block;margin-left: auto;margin-right: auto;  height:60%;" class="card-img-top" src="./Trucking_NodeJS_Server/uploads/'+myObj[i].image_path+'" alt="Card image cap"><div style="margin:30px;"class="card-block"> <h1 style="text-align: center;"class="card-title">'+myObj[i].category_name+'</h4></div></div></div>');
+
+              //console.log(selected_category);
+          }
+      }
+  };
+  xmlhttp.open("GET", "http://"+ip+":3000/fetch_categories", true);
+  xmlhttp.send();
+
+}
+
 $(document).ready(function () {
 
   //  var products[];
@@ -87,22 +107,6 @@ $(document).ready(function () {
 
 
 
-
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var myObj = JSON.parse(this.responseText);
-            for(var i=0;i<myObj.length;i++)
-            {
-          //      console.log(myObj[i].image_path)
-                $("#categories").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card cat_button" data-id="'+myObj[i].category_name+'" style="width: 20rem;"><img style="display: block;margin-left: auto;margin-right: auto;width:auto; height:auto; max-width:100%; max-height:75%;" class="card-img-top" src="./Trucking_NodeJS_Server/uploads/'+myObj[i].image_path+'" alt="Card image cap"><div style="margin:30px;"class="card-block"> <h1 style="text-align: center;"class="card-title">'+myObj[i].category_name+'</h4></div></div></div>');
-
-                //console.log(selected_category);
-            }
-        }
-    };
-    xmlhttp.open("GET", "http://"+ip+":3000/fetch_categories", true);
-    xmlhttp.send();
 });
 
 
@@ -136,7 +140,7 @@ if(back!=1){
             if(myObj[i].categorie==categorie_id)
             {
 
-              $("#products").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card prod_button" data-id="'+myObj[i].id+'" style="width: 20rem;"><img style="display: block;margin-left: auto;margin-right: auto;width:auto; height:auto; max-width:100%; max-height:75%;" class="card-img-top" src="./Trucking_NodeJS_Server/uploads/'+myObj[i].image_path+'" alt="Card image cap"><div style="margin:30px;"class="card-block"> <h1 style="text-align: center;"class="card-title">'+myObj[i].product_name+'</h4></div></div></div>');
+                $("#products").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card prod_button" data-id="'+myObj[i].id+'" style="width: 20rem;"><img style="display: block;margin-left: auto;margin-right: auto;height:60%;" class="card-img-top" src="./Trucking_NodeJS_Server/uploads/'+myObj[i].image_path+'" alt="Card image cap"><div style="margin:30px;"class="card-block"> <h1 style="text-align: center;"class="card-title">'+myObj[i].product_name+'</h4></div></div></div>');
             }
 
           }
@@ -155,6 +159,7 @@ $(".media-slides").click(function () {
     $(".media-slides").hide();
     $(".parent_layout").show('bounceInUp animated');
     $(".category_browser").show('bounceInUp animated');
+      loadCategoriesAfterMedia();
 });
 
 
@@ -171,7 +176,7 @@ selected_category=$(this).data("id");
           var myObj = JSON.parse(this.responseText);
         //  selected_category=myObj[i].category_name;
           //console.log(selected_category);
-  $(".child_products").remove();
+          $(".child_products").remove();
           for(var i=0;i<myObj.length;i++)
           {
 
@@ -182,7 +187,7 @@ selected_category=$(this).data("id");
 
             //  $("#products").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card" style="width: 20rem;"><img class="card-img-top" src="assets/img/truck_engine.jpg" alt="Card image cap"><div style="margin:30px;"class="card-block">        <h4 class="card-title">'+myObj[i].product_name+'</h4><p class="card-text">'+myObj[i].description+'</p><a href="product.html?id='+myObj[i].id+'" data-id="" class="btn btn-primary prod_button">See More</a></div></div></div>');
         //      $("#products").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card" style="margin-top:30px; width: 20rem;"><img style="display: block;margin-left: auto;margin-right: auto;max-width:30%; margin-top:20px;" class="card-img-top" src="images/icon-brake.png" alt="Card image cap"><div style="margin:30px;"class="card-block">        <h4 style="text-align: center;"class="card-title">'+myObj[i].product_name+'</h4><p style="text-align: center;" class="card-text">'+myObj[i].description+'</p><a href="product.html?id='+myObj[i].id+'" data-id="" style="display: block;margin-left: auto;margin-right: auto;max-width:30%; text-align: center; color:#12253A;" class="cat_button">Check Gallery</a></div></div></div>');
-              $("#products").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card prod_button" data-id="'+myObj[i].id+'" style="width: 20rem;"><img style="display: block;margin-left: auto;margin-right: auto;width:auto; height:auto; max-width:100%; max-height:75%;" class="card-img-top" src="./Trucking_NodeJS_Server/uploads/'+myObj[i].image_path+'" alt="Card image cap"><div style="margin:30px;"class="card-block"> <h1 style="text-align: center;"class="card-title">'+myObj[i].product_name+'</h4></div></div></div>');
+              $("#products").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card prod_button" data-id="'+myObj[i].id+'" style="width: 20rem;"><img style="display: block;margin-left: auto;margin-right: auto;height:60%;" class="card-img-top" src="./Trucking_NodeJS_Server/uploads/'+myObj[i].image_path+'" alt="Card image cap"><div style="margin:30px;"class="card-block"> <h1 style="text-align: center;"class="card-title">'+myObj[i].product_name+'</h4></div></div></div>');
 
             }
 
@@ -210,7 +215,7 @@ $(".product_browser").hide('bounceInUp animated');
                 $(".child_products").remove();
               for(var i=0;i<myObj.length;i++)
               {
-                $("#categories").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card cat_button" data-id="'+myObj[i].category_name+'" style="width: 20rem;"><img style="display: block;margin-left: auto;margin-right: auto;width:auto; height:auto; max-width:100%; max-height:75%;" class="card-img-top" src="./Trucking_NodeJS_Server/uploads/'+myObj[i].image_path+'" alt="Card image cap"><div style="margin:30px;"class="card-block"> <h1 style="text-align: center;"class="card-title">'+myObj[i].category_name+'</h4></div></div></div>');
+                $("#categories").append('<div class="col-xs-6 col-sm-4 child_products"><div class="card cat_button" data-id="'+myObj[i].category_name+'" style="width: 20rem;"><img style="display: block;margin-left: auto;margin-right: auto;height:60%;" class="card-img-top" src="./Trucking_NodeJS_Server/uploads/'+myObj[i].image_path+'" alt="Card image cap"><div style="margin:30px;"class="card-block"> <h1 style="text-align: center;"class="card-title">'+myObj[i].category_name+'</h4></div></div></div>');
 
                   //console.log(selected_category);
               }
@@ -227,7 +232,7 @@ $(document).on("click", ".prod_button", function(){
   var id = $(this).attr("data-id");
   window.location='product.html?id='+id;
   /*
-  var url="http://localhost:3000/"
+  var url="http://50.63.165.6:3000/"
  var id = $(this).attr("data-id");
    var category = $(this).attr("data-product");
  console.log('you selected on '+id);
@@ -248,11 +253,10 @@ myVar = setTimeout(function() {
   $(".media-slides").show();
   $(".parent_layout").hide('bounceInUp animated');
   $(".product_browser").hide('bounceInUp animated');
-
   $(".child_products").remove();
   $(".product_description_name").remove();
 
-}, 500000);
+}, 300000);
 });
 
 
@@ -267,7 +271,7 @@ var myVar;
         $(".child_products").remove();
         $(".product_description_name").remove();
 
-      }, 500000);
+      }, 300000);
   });
 
   $(window).scroll(function() {
@@ -278,6 +282,9 @@ var myVar;
     }
   });
 
+  $(".bottom_indicator").click(function () {
+    $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+  });
 
 
 </script>
@@ -309,6 +316,23 @@ div.card {
   margin-top: 1em;
   height: 333px;
 }
+
+.video_overlay{
+  position:fixed;
+  z-index:5;
+   left:0;
+   top:0;
+  margin:0px;
+  width:100%; height:10%;
+  background:   linear-gradient(to top, rgba(0,0,0,0), rgba(0,0,0,.8));
+
+  text-align: center;
+  color:white;
+
+}
+
+
+
 
 /* width
 ::-webkit-scrollbar {

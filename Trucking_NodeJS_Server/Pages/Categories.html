@@ -136,11 +136,11 @@ xmlhttp.onreadystatechange = function() {
       cell1.innerHTML = myObj[i].category_name;
       cell2.innerHTML = myObj[i].image;
       cell3.innerHTML ="<a href='#' id='delete_category' data-id="+myObj[i].id+" data-category="+encodeURIComponent(myObj[i].category_name.trim())+">Delete</a>";
-      cell4.innerHTML ="<a id='edit_category' href='http://localhost:3000/edit?id="+myObj[i].id+"&category="+myObj[i].category_name+"'>Edit Products</a>";
+      cell4.innerHTML ="<a id='edit_category' href='http://50.63.165.6:3000/edit?id="+myObj[i].id+"&category="+myObj[i].category_name+"'>Edit Products</a>";
       }
   }
 };
-xmlhttp.open("GET", "http://localhost:3000/fetch_categories", true);
+xmlhttp.open("GET", "http://50.63.165.6:3000/fetch_categories", true);
 xmlhttp.send();
 //////////////////end setting data///////////////////////////
 });
@@ -151,7 +151,7 @@ xmlhttp.send();
   <script>
   //POSTING
   $(document).ready(function(){
-    var url="http://localhost:3000/"
+    var url="http://50.63.165.6:3000/"
     $('form').on('submit', function(){
       console.log("I clicked");
         var cat_field = $('#field_category');
@@ -161,13 +161,21 @@ xmlhttp.send();
         console.log(actual_file);
         var new_category = {data:[{item: cat_field.val()},{item: filename}]};
         console.log(new_category);
+<<<<<<< HEAD
+		    $('#overlay_loading').show();
+=======
     $('#loading_spinner').show();
+>>>>>>> 81bc1bce26a9770dcdaa8bf7bf02d9af04996025
         $(this).ajaxSubmit({
         url: '/add_category',
         data: new_category,
         success: function(data){
               alert("Category "+cat_field.val()+" Added.");
+<<<<<<< HEAD
+			      $('#overlay_loading').hide();
+=======
                 $('#loading_spinner').hide();
+>>>>>>> 81bc1bce26a9770dcdaa8bf7bf02d9af04996025
               location.reload();
 
         }
@@ -176,18 +184,26 @@ xmlhttp.send();
     });
 });
  $(document).on("click", "#delete_category", function(){
-   var url="http://localhost:3000/"
+   var url="http://50.63.165.6:3000/"
   var id = $(this).attr("data-id");
     var category = $(this).attr("data-category");
   console.log('you selected on '+category);
   if (confirm("Are you sure you want to delete "+decodeURIComponent(category)+" category? All dependencies will be deleted!") == true) {
+<<<<<<< HEAD
+      $('#overlay_loading').show();
+=======
     $('#loading_spinner').show();
+>>>>>>> 81bc1bce26a9770dcdaa8bf7bf02d9af04996025
   $.ajax({
     type: 'DELETE',
     url: url+'delete_category/' + id+'/'+category,
     success: function(data){
       //do something with the data via front-end framework
+<<<<<<< HEAD
+	      $('#overlay_loading').hide();
+=======
       $('#loading_spinner').hide();
+>>>>>>> 81bc1bce26a9770dcdaa8bf7bf02d9af04996025
       location.reload();
     }
   });
@@ -243,7 +259,10 @@ table, th, td {
 	position:relative;
 	top:1px;
 }
+<<<<<<< HEAD
+=======
 
+>>>>>>> 81bc1bce26a9770dcdaa8bf7bf02d9af04996025
 #overlay_loading {
 display:none;
 position:fixed;
@@ -266,5 +285,10 @@ color:white;
    vertical-align: middle;
    line-height: normal;
 }
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 81bc1bce26a9770dcdaa8bf7bf02d9af04996025
 
 </style>

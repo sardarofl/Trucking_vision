@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
+    <meta name="50.63.165.6" content="">
     <meta name="author" content="">
 
     <title>Vision Trucking - Categories</title>
@@ -62,11 +62,14 @@
                         <h1 id="category_identifier" class="page-header">Edit Product</h1>
                     </div>
 						<!-- /.col-lg-12 -->
-
+<div id="overlay_loading">
+<img id="gifspinner" src="../img/Gear-3.1s-200px.gif" alt="spinner" height="15%" width="15%">
+</div>
             <form method="POST"   enctype="multipart/form-data">
             <input id="field_product" name="product" class="form-control" placeholder="Enter a new Product Name">
            <input id="category_name" type="hidden" name="category" value="">
            </br>
+		   
            <div>
              <input id="image_name" type="file" name="image">
            </div>
@@ -160,14 +163,14 @@ xmlhttp.onreadystatechange = function() {
       cell2.innerHTML = myObj[i].image;
       cell3.innerHTML ="<a href='#' id='delete_product' data-id="+myObj[i].id+" data-product="+encodeURIComponent(myObj[i].product_name.trim())+">Delete</a>";
       //cell4.innerHTML ="<a id='edit_gallery' href=''>Edit Gallery</a>";
-      cell4.innerHTML ="<a id='edit_gallery' href='http://localhost:3000/gallery?id="+myObj[i].id+"&category="+category_selected+"'>Edit Products</a>";
+      cell4.innerHTML ="<a id='edit_gallery' href='http://50.63.165.6:3000/gallery?id="+myObj[i].id+"&category="+category_selected+"'>Edit Products</a>";
 
       //cell5.innerHTML ="<form method='post'><input name='del_value' value="+myObj[i].id+" class='form-control'><input class='deletetable' type='submit' value='Delete' class='btn btn-primary'></input></form>";
     }
 
   }
 };
-xmlhttp.open("GET", "http://localhost:3000/fetch_products/"+category_selected, true);
+xmlhttp.open("GET", "http://50.63.165.6:3000/fetch_products/"+category_selected, true);
 xmlhttp.send();
 
 //////////////////end setting data///////////////////////////
@@ -179,7 +182,7 @@ xmlhttp.send();
   <script>
   //POSTING
   $(document).ready(function(){
-    var url="http://localhost:3000/"
+    var url="http://50.63.165.6:3000/"
     $('form').on('submit', function(){
       console.log("I clicked");
 
@@ -191,13 +194,14 @@ xmlhttp.send();
         console.log(actual_file);
         var new_product = {data:[{item: prod_field.val()},{item: filename},{item: cat_field.val()}]};
         console.log(new_product);
-
+		$('#overlay_loading').show();
 
         $(this).ajaxSubmit({
         url: '/add_product',
         data: new_product,
         success: function(data){
               alert("Product "+prod_field.val()+" Added.");
+			  $('#overlay_loading').hide();
               location.reload();
         }
       });
@@ -208,15 +212,17 @@ xmlhttp.send();
 });
 
  $(document).on("click", "#delete_product", function(){
-   var url="http://localhost:3000/"
+   var url="http://50.63.165.6:3000/"
   var id = $(this).attr("data-id");
     var category = $(this).attr("data-product");
   console.log('you selected on '+id);
   if (confirm("Are you sure you want to delete "+decodeURIComponent(category)+" product? All dependencies will be deleted!") == true) {
+  $('#overlay_loading').show();
     $.ajax({
       type: 'DELETE',
       url: url+'delete_product/' + id,
       success: function(data){
+	  $('#overlay_loading').hide();
         //do something with the data via front-end framework
         location.reload();
       }
@@ -229,7 +235,7 @@ xmlhttp.send();
 
 
 $(document).on("click", "#back_to_categories", function(){
-  var url="http://localhost:3000/";
+  var url="http://50.63.165.6:3000/";
   window.location.href = url;
 });
 
@@ -281,6 +287,28 @@ table, th, td {
 .custom_button:active {
 	position:relative;
 	top:1px;
+}
+#overlay_loading {
+display:none;
+position:fixed;
+z-index:5;
+ left:0;
+ top:0;
+margin:0px;
+width:100%; height:100%;
+background: rgba(54, 25, 25, .7);
+text-align: center;
+color:white;
+ }
+
+#gifspinner{
+  position:fixed;
+  width:150px;
+  height:150px;
+  top:50%;
+  display: inline-block;
+   vertical-align: middle;
+   line-height: normal;
 }
 
 

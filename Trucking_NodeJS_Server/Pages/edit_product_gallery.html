@@ -54,6 +54,9 @@
         <div id="page-wrapper">
             <div class="container-fluid">
             </br>
+			<div id="overlay_loading">
+<img id="gifspinner" src="../img/Gear-3.1s-200px.gif" alt="spinner" height="15%" width="15%">
+</div>
                 <div class="row">
                     <button id="back_to_edit" class="custom_button" >Back</button>
                 </div>
@@ -194,7 +197,7 @@ if(tab== null)
 document.getElementById(tab).click();
 
   $(document).on("click", "#back_to_edit", function(){
-    window.location.href = "http://localhost:3000/edit?id="+id_selected+"&category="+category_selected+"";
+    window.location.href = "http://50.63.165.6:3000/edit?id="+id_selected+"&category="+category_selected+"";
     console.log("clicked");
   });
   //document.getElementById("category_name").value = category_selected;
@@ -202,7 +205,7 @@ document.getElementById(tab).click();
 
 
     $("#multipleupload").uploadFile({
-   url:"http://localhost:3000/add_gallery",
+   url:"http://50.63.165.6:3000/add_gallery",
    formData: { item:id_selected  },
    multiple:true,
    dragDrop:true,
@@ -228,12 +231,14 @@ document.getElementById(tab).click();
 
       // var new_youtube_link = {data:[{id: id_selected},{link: field_youtube_link},{desc: field_youtube}]};
        console.log(isYoutube(field_youtube_link));
+	   $('#overlay_loading').show();
        if(isYoutube(field_youtube_link)){  $.ajax({
            type: "POST",
-           url: 'http://localhost:3000/add_video',
+           url: 'http://50.63.165.6:3000/add_video',
            data:JSON.parse(JSON.stringify(new_youtube_link)),
            dataType: 'json',
            success: function(data){
+		   $('#overlay_loading').hide();
              //do something with the data via front-end framework
         //    location.reload();
           //  alert("added video");
@@ -301,7 +306,7 @@ xmlhttp.onreadystatechange = function() {
 
   }
 };
-xmlhttp.open("GET", "http://localhost:3000/fetch_products_media/"+id_selected, true);
+xmlhttp.open("GET", "http://50.63.165.6:3000/fetch_products_media/"+id_selected, true);
 xmlhttp.send();
 
 //////////////////end setting data///////////////////////////
@@ -342,35 +347,39 @@ if (url != undefined || url != '') {
   <script>
   //POSTING
   $(document).ready(function(){
-    var url="http://localhost:3000/"
+    var url="http://50.63.165.6:3000/"
 
 
 });
 
  $(document).on("click", "#delete_img", function(){
-   var url="http://localhost:3000/"
+   var url="http://50.63.165.6:3000/"
   var id = $(this).attr("data-id");
     var category = $(this).attr("data-product");
   console.log('you selected on '+id);
+  $('#overlay_loading').show();
   $.ajax({
     type: 'DELETE',
     url: url+'delete_media_img/' + id,
     success: function(data){
       //do something with the data via front-end framework
+	  $('#overlay_loading').hide();
       location.reload();
     }
   });
 });
 
 $(document).on("click", "#delete_video", function(){
-  var url="http://localhost:3000/"
+  var url="http://50.63.165.6:3000/"
  var id = $(this).attr("data-id");
    var category = $(this).attr("data-product");
  console.log('you selected on '+id);
+ $('#overlay_loading').show();
  $.ajax({
    type: 'DELETE',
    url: url+'delete_media_video/' + id,
    success: function(data){
+   $('#overlay_loading').hide();
      //do something with the data via front-end framework
      location.reload();
    }
@@ -378,7 +387,7 @@ $(document).on("click", "#delete_video", function(){
 });
 
 $(document).on("click", "#set_description", function(){
-  var url="http://localhost:3000/"
+  var url="http://50.63.165.6:3000/"
     var id = $(this).attr("data-id");
     var desc = $(this).attr("data-desc");
 
@@ -387,7 +396,7 @@ $(document).on("click", "#set_description", function(){
 
 
     console.log("title: "+title+" id: "+desc);
-
+	$('#overlay_loading').show();
     $.ajax({
         type:"POST",
       url: url+'set_desc_title',
@@ -395,6 +404,7 @@ $(document).on("click", "#set_description", function(){
       data:{title:title,desc:desc,id:id},
     //  data:[{item: title},{item: desc},{item: id}],
       success: function(data){
+	  $('#overlay_loading').hide();
         //do something with the data via front-end framework
         location.reload();
       }
@@ -542,5 +552,26 @@ body {font-family: Arial;}
 	position:relative;
 	top:1px;
 }
+#overlay_loading {
+display:none;
+position:fixed;
+z-index:5;
+ left:0;
+ top:0;
+margin:0px;
+width:100%; height:100%;
+background: rgba(54, 25, 25, .7);
+text-align: center;
+color:white;
+ }
 
+#gifspinner{
+  position:fixed;
+  width:150px;
+  height:150px;
+  top:50%;
+  display: inline-block;
+   vertical-align: middle;
+   line-height: normal;
+}
 </style>
